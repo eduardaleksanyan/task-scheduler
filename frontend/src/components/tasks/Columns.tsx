@@ -4,6 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Task } from "../../types/Tasks";
 import { TaskType } from "../../constants/Constants";
+import { viewDate } from "../../utils/utils";
 
 interface Props {
   handleEdit: (row: Task) => void;
@@ -61,6 +62,9 @@ const Columns = ({ handleEdit, handleDelete }: Props): GridColDef[] => {
       field: "date",
       headerName: "Date",
       flex: 1,
+      renderCell: (params) => {
+        return params.row.date ? viewDate(params.row.date) : '-';
+      }
     },
     {
       field: "action",

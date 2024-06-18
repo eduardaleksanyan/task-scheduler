@@ -10,6 +10,7 @@ import {
   BULL_TASK_SCHEDULER_NAME,
   TaskType,
 } from '../../constants/constants';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class TaskSchedulerService implements OnModuleInit {
@@ -32,12 +33,14 @@ export class TaskSchedulerService implements OnModuleInit {
         jobId: taskId,
       } as JobOptions);
     } else if (task.type === TaskType.ONE_TIME && task.date) {
-      const date = new Date(task.date);
-      await this.taskQueue.add({ taskId, taskName, isOneTime: true }, {
-        delay: date.getTime() - Date.now(),
-        removeOnComplete: true,
-        jobId: taskId,
-      } as JobOptions);
+      const delay = this.getDelayTimeForOneTimeTask(task.date);
+      if (delay >= 0) {
+        await this.taskQueue.add({ taskId, taskName, isOneTime: true }, {
+          delay: delay,
+          removeOnComplete: true,
+          jobId: taskId,
+        } as JobOptions);
+      }
     }
   }
 
@@ -66,5 +69,16 @@ export class TaskSchedulerService implements OnModuleInit {
       await Promise.all(tasks.map((task) => this.scheduleTask(task)));
       skip += CHUNK_SIZE;
     }
+  }
+
+  // private getDelayTimeForOneTimeTask(date: Date): number {
+  //   const localDate = new Date(getUserLocalTime(date));
+  //   return localDate.getTime() - Date.now();
+  // }
+
+  private getDelayTimeForOneTimeTask(date: Date): number {
+    const localDate = DateTime.fromJSDate(date);
+    const now = DateTime.now();
+    return localDate.diff(now).as('milliseconds');
   }
 }

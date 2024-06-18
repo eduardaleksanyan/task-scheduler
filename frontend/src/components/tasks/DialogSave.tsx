@@ -156,6 +156,7 @@ export default function DialogSave({ open, handleClose, task }: Props) {
                   label={"Date"}
                   minDate={new Date()}
                   disabled={disabled}
+                  readOnly={true}
                 />
               )}
               <RHFCheckbox

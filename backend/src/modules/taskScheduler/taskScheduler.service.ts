@@ -44,10 +44,23 @@ export class TaskSchedulerService implements OnModuleInit {
     }
   }
 
-  async removeJob(jobId: string): Promise<void> {
-    const job = await this.taskQueue.getJob(jobId);
-    if (job) {
-      await job.remove();
+  async removeJob(taskId: string): Promise<void> {
+    const task = await this.taskModel.findById(taskId).exec();
+    if (!task) {
+      throw new Error('Task not found');
+    }
+
+    if (task.type === TaskType.ONE_TIME) {
+      const job = await this.taskQueue.getJob(taskId);
+      if (job) {
+        await job.remove();
+      }
+    } else {
+      const repeatOptions: any = {
+        cron: task.cron,
+        jobId: taskId,
+      };
+      await this.taskQueue.removeRepeatable(repeatOptions);
     }
   }
 
@@ -70,11 +83,6 @@ export class TaskSchedulerService implements OnModuleInit {
       skip += CHUNK_SIZE;
     }
   }
-
-  // private getDelayTimeForOneTimeTask(date: Date): number {
-  //   const localDate = new Date(getUserLocalTime(date));
-  //   return localDate.getTime() - Date.now();
-  // }
 
   private getDelayTimeForOneTimeTask(date: Date): number {
     const localDate = DateTime.fromJSDate(date);

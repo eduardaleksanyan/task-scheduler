@@ -7,7 +7,6 @@ interface Props {
   handleClose: any;
 }
 export default function EditTask({ task, open, handleClose }: Props) {
-  console.log('EditTask', task, open)
   return (
     <>
       <DialogSave open={open} handleClose={handleClose} task={task} />

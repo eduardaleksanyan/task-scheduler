@@ -114,10 +114,18 @@ export default function DialogSave({ open, handleClose, task }: Props) {
   }, [isSuccessEdit, isSuccessAdd]);
 
   const onSubmitForm = async (data: FormFields) => {
+    const cleanedData = { ...data };
+
+    if (cleanedData.type === TaskType.ONE_TIME) {
+      delete cleanedData.cron;
+    } else if (cleanedData.type === TaskType.RECURRING) {
+      delete cleanedData.date;
+    }
+
     if (task) {
-      updateTask({ ...task, ...data });
+      updateTask({ ...task, ...cleanedData });
     } else {
-      createTask({ ...data });
+      createTask({ ...cleanedData });
     }
   };
 

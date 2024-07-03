@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { TaskRegistrationsService } from './taskRegistrations.service';
 import { Tasks } from './schemas/tasks.schema';
+import { TaskRegistrationsDto } from './dto/taskRegistrations.dto';
 
 @Controller('tasks')
 export class TaskRegistrationsController {
@@ -17,7 +18,7 @@ export class TaskRegistrationsController {
   ) {}
 
   @Post()
-  async create(@Body() taskDto: any): Promise<Tasks> {
+  async create(@Body() taskDto: TaskRegistrationsDto): Promise<Tasks> {
     return this.taskRegistrationsService.create(taskDto);
   }
 
@@ -32,7 +33,10 @@ export class TaskRegistrationsController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() taskDto: any): Promise<Tasks> {
+  async update(
+    @Param('id') id: string,
+    @Body() taskDto: TaskRegistrationsDto,
+  ): Promise<Tasks> {
     return this.taskRegistrationsService.update(id, taskDto);
   }
 

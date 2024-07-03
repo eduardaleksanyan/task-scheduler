@@ -1,38 +1,38 @@
 import {
   IsString,
   IsBoolean,
-  IsDateString,
   IsOptional,
   IsEnum,
   Matches,
 } from 'class-validator';
 import { TaskType } from '../../../constants/constants';
 import { CRON_REGEX } from '../../../utils/regex';
+import {
+  IsCronRequired,
+  IsDateRequired,
+  IsValidDate,
+} from './customValidation';
 
 export class TaskRegistrationsDto {
   @IsString()
   name: string;
 
   @IsEnum(TaskType)
-  type: string;
+  type: TaskType;
 
   @IsOptional()
   @IsString()
   @Matches(CRON_REGEX, {
     message: 'cron must be a valid cron expression',
   })
+  // @IsCronRequired()
   cron?: string;
 
   @IsOptional()
-  @IsDateString()
-  date?: Date;
+  @IsValidDate()
+  // @IsDateRequired()
+  date?: string;
 
   @IsBoolean()
   isActive: boolean;
-
-  @IsDateString()
-  createdAt: Date;
-
-  @IsDateString()
-  updatedAt: Date;
 }

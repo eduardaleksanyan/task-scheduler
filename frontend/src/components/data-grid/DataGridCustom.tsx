@@ -1,7 +1,7 @@
 import * as React from "react";
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import { StyledBox } from "./styles";
-import { Typography } from "@mui/material";
+import Alert from "@mui/material/Alert";
 
 interface Props {
   rows: GridRowsProp;
@@ -13,7 +13,7 @@ const DataGridCustom = ({ rows, columns, pageSize = 20 }: Props) => {
   return (
     <StyledBox>
       {!rows || !rows.length ? (
-        <Typography sx={{ textAlign: "center" }}>No rows</Typography>
+        <Alert severity="info">No rows</Alert>
       ) : (
         <DataGrid
           rows={rows}

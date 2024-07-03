@@ -7,11 +7,7 @@ import {
 } from 'class-validator';
 import { TaskType } from '../../../constants/constants';
 import { CRON_REGEX } from '../../../utils/regex';
-import {
-  IsCronRequired,
-  IsDateRequired,
-  IsValidDate,
-} from './customValidation';
+import { IsValidDate } from './customValidation';
 
 export class TaskRegistrationsDto {
   @IsString()

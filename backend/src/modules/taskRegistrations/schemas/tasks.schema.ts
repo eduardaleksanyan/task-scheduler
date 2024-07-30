@@ -2,7 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { TaskType } from '../../../constants/constants';
 
-
 @Schema({ collection: 'tasks' })
 export class Tasks extends Document {
   @Prop({ required: true })
